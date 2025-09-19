@@ -17,11 +17,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(AcceptJsonHeader::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (NotFoundHttpException $e) {
-        return response()->json([
-            'error' => 'Resource not found',
-            'message' => $e->getMessage(),
-        ], 404);
-    });
+        if(request()->is('api/*')) {
+            $exceptions->render(function (NotFoundHttpException $e) {
+                return response()->json([
+                    'error' => 'Resource not found',
+                    'message' => $e->getMessage(),
+                ], 404);
+            });
+        }
         
     })->create();
