@@ -37,11 +37,29 @@ class User extends Model
         'remember_token',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
     public static function booted()
     {
         static::creating(function ($user) {
             $user->email_verified_at = now();
         });
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 
 }
